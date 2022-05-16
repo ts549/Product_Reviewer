@@ -5,6 +5,8 @@ from urllib.parse import urlparse
 class Parser():
 
     def __init__(self, url):
+        #Define the different sections of the URL
+        
         sects = urlparse(url)
         self.scheme = sects[0]
         self.netloc = sects[1]
@@ -12,6 +14,8 @@ class Parser():
         self.hostname = self.scheme + '://' + self.netloc
 
     def get_page(self):
+        #Get request for page of URL
+
         url = self.hostname + self.path
         params = {'url': url, 'wait': 2}
         page = requests.get('http://localhost:8050/render.html', params=params)
@@ -19,11 +23,15 @@ class Parser():
         return page
 
     def get_reviews(self, page):
+        #Get request for reviews on Amazon
+
         soup = BeautifulSoup(page.text, 'html.parser')
         reviews = soup.find_all('div', {'data-hook': 'review'})
         return reviews
 
     def get_next_page(self, page):
+        #Get request for href of next page
+
         soup = BeautifulSoup(page.text, 'html.parser')
         ref = soup.find('li', {'class': 'a-last'})
 

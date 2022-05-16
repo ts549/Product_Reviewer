@@ -1,18 +1,18 @@
+from typing import Text
+import pandas as pd
 from struct import unpack
 from util.Parser import Parser
 from util.Pickler import Pickler
 from util.TextProcessor import TextProcessor
 
+#Initial manual input of URL, will change to interactive input box
 url = 'https://www.amazon.com/Amazon-Essentials-Straight-Fit-Jogger-Khaki/product-reviews/B07F2K9R2T/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews'
 
 parser = Parser(url)
-
-#parser.set_path('/Amazon-Essentials-Straight-Fit-Jogger-Khaki/product-reviews/B07F2K9R2T/ref=cm_cr_arp_d_paging_btm_80?ie=UTF8&pageNumber=80')
-
 first = True
-
 pickler = Pickler()
 
+#Boolean to decide if need to scrape the URL
 pickled = True
 
 while (not pickled and (first or next_ref != None)):
@@ -26,6 +26,8 @@ while (not pickled and (first or next_ref != None)):
     if (len(reviews) == 0): break
 
     for review in reviews:
+        #Gets the title and review
+
         title_obj = review.find('a', {'data-hook': 'review-title'})
         body_obj = review.find('span', {'data-hook': 'review-body'})
 
@@ -47,7 +49,8 @@ while (not pickled and (first or next_ref != None)):
     next_ref = parser.get_next_page(page)
 
     if next_ref != None:
-        #next_path = next_ref.contents[0].get('href')
+        #Goes to the next page if it exists
+
         next_path = next_ref.find('a').get('href')
         print(next_path)
         parser.set_path(next_path)
@@ -57,4 +60,7 @@ if not pickled:
 
 data = pickler.unpack()
 
-print(data[1])
+TextProcessor.clean_data(data)
+
+corpus = TextProcessor.generate_corpus(data)
+print(corpus.reviews.loc[3])
