@@ -26,6 +26,11 @@ class Parser():
     def get_next_page(self, page):
         soup = BeautifulSoup(page.text, 'html.parser')
         ref = soup.find('li', {'class': 'a-last'})
+
+
+        if (ref.get('class')[0] != 'a-last'):
+            return None
+
         return ref
 
     def set_path(self, path):

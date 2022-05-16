@@ -5,13 +5,15 @@ url = 'https://www.amazon.com/Amazon-Essentials-Straight-Fit-Jogger-Khaki/produc
 
 parser = Parser(url)
 
+#parser.set_path('/Amazon-Essentials-Straight-Fit-Jogger-Khaki/product-reviews/B07F2K9R2T/ref=cm_cr_arp_d_paging_btm_80?ie=UTF8&pageNumber=80')
+
 first = True
 
 pickler = Pickler()
 
 pickled = True
 
-while (first or next_ref != None):
+while (not pickled and (first or next_ref != None)):
     first = False
     page = parser.get_page()
 
@@ -43,7 +45,9 @@ while (first or next_ref != None):
     next_ref = parser.get_next_page(page)
 
     if next_ref != None:
-        next_path = next_ref.contents[0].get('href')
+        #next_path = next_ref.contents[0].get('href')
+        next_path = next_ref.find('a').get('href')
+        print(next_path)
         parser.set_path(next_path)
 
 if not pickled:
