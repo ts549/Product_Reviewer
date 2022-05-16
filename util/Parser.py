@@ -27,7 +27,6 @@ class Parser():
         soup = BeautifulSoup(page.text, 'html.parser')
         ref = soup.find('li', {'class': 'a-last'})
 
-
         if (ref.get('class')[0] != 'a-last'):
             return None
 

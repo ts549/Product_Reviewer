@@ -1,0 +1,22 @@
+import pandas as pd
+import re
+import string
+
+class TextProcessor:
+    
+    @staticmethod
+    def clean_data(data):
+        for reviewer, review in data.items():
+            review
+
+            review = review.lower()
+            review = re.sub('\[.*?\]', '', review)
+            review = re.sub(' \[ \n\]', ' ', review)
+
+            data[reviewer] = review
+
+    #@staticmethod
+    #def clean_data(self):
+        #pd.set_option('max_colwidth', 50)
+        
+        #data.df = pd.DataFrame.from_dict()

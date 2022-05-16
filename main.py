@@ -1,5 +1,7 @@
+from struct import unpack
 from util.Parser import Parser
 from util.Pickler import Pickler
+from util.TextProcessor import TextProcessor
 
 url = 'https://www.amazon.com/Amazon-Essentials-Straight-Fit-Jogger-Khaki/product-reviews/B07F2K9R2T/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews'
 
@@ -52,3 +54,7 @@ while (not pickled and (first or next_ref != None)):
 
 if not pickled:
     pickler.pickle_reviews()
+
+data = pickler.unpack()
+
+print(data[1])
