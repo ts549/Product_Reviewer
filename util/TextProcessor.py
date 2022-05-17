@@ -1,6 +1,11 @@
 import pandas as pd
 import re
 import string
+from sklearn.feature_extraction.text import CountVectorizer
+
+from .MaxHeap import MaxHeap
+
+#from MaxHeap import MaxHeap
 
 class TextProcessor:
     
@@ -30,3 +35,29 @@ class TextProcessor:
         data_df = data_df.sort_index()
 
         return data_df
+
+    @staticmethod
+    def tokenize(corpus, stop_words):
+        #Generates document term matrix
+
+        cv = CountVectorizer(stop_words=stop_words)
+        data_cv = cv.fit_transform(corpus.reviews)
+        dtm = pd.DataFrame(data_cv.toarray(), columns=cv.get_feature_names_out())
+        dtm.index = corpus.index
+
+        return dtm
+    
+    @staticmethod
+    def sort_max_words(dtm):
+        #Returns the most common words
+
+        maxq = MaxHeap()
+
+        num_occ = dtm.sum(axis=0)
+
+        for key in num_occ.keys():
+            maxq.add([key, num_occ[key]])
+
+        max_words = maxq.to_dict()
+
+        return pd.DataFrame.from_dict(max_words).transpose().sort_index()
